@@ -1,12 +1,13 @@
 ## 요구사항
 
 ### 기본
-- [v] 기본
-- [v] 기본 항목 2
+- [v] UserService, ChannelService, MessageService 고도화 완료.
+- [v] UserStatusService, ReadSatusService, AuthService 추가
+- [ ] BinaryContentService는 구현 못했습니다.   
 
 ### 심화
-- [ ] 심화 항목 1
-- [ ] 심화 항목 2
+- [ ] 
+- [ ] 
 
 ## 주요 변경사항
 - 
@@ -16,5 +17,5 @@
 !
 
 ## 멘토에게
--  JFC 컬렉션까지 완료하고 직렬화 부분은 미완성입니다.
+-  
 - 
