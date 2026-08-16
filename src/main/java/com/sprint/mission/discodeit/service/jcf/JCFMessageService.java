@@ -54,6 +54,5 @@ public class JCFMessageService implements MessageService {
     @Override
     public void delete(UUID uuid) {
         messageRepository.delete(uuid);
-        System.out.println("메세지 삭제 완료.");
     }
 }

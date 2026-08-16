@@ -14,14 +14,14 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class JCFMessageRepository implements MessageRepository {
 
-    private final Map<UUID, Message> messageInbox;
+    private final Map<UUID, Message> messageInbox = new HashMap<>();
 
 
     @Override
     public Message save(Message message) {
-        System.out.println(messageInbox);
-        messageInbox.put(message.getId(),message);
-        return message;
+        UUID mid = message.getId();
+        messageInbox.put(mid,message);
+        return messageInbox.get(mid);
     }
 
     @Override

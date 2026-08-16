@@ -7,7 +7,9 @@ import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface MessageService {
 
     MessageResponse create(MessageCreateRequest messageCreateRequest);
