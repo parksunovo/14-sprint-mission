@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.dto.readStatus;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import java.util.UUID;
 
-public record ReadStausResponse (
+public record ReadStatusResponse(
     UUID uuid,
     UUID UserId,
     UUID ChannelId,
@@ -11,8 +11,8 @@ public record ReadStausResponse (
     Long recentReadAt
 
 ){
-    public static ReadStausResponse from(ReadStatus readStatus) {
-        return new ReadStausResponse(
+    public static ReadStatusResponse from(ReadStatus readStatus) {
+        return new ReadStatusResponse(
             readStatus.getUuid(),
             readStatus.getUserId(),
             readStatus.getChannelId(),

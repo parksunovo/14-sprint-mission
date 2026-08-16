@@ -5,8 +5,6 @@ import java.util.UUID;
 public record ReadStausRequest (
     UUID uuid,
     Long recentReadAt
-
-
 ){
 
 }
