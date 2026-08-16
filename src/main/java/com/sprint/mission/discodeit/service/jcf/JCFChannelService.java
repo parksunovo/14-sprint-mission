@@ -9,6 +9,8 @@ import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
+import com.sprint.mission.discodeit.exception.ExceptionType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -50,7 +52,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public ChannelResponse findChannel(UUID uuid) {
         Channel channel = channelRepository.findChannel(uuid).orElseThrow(
-            () -> new IllegalArgumentException("해당 채널은 존재하지 않습니다.")
+            () -> new DiscodeitRuntimeException(ExceptionType.CHANNEL_NOT_FOUND)
         );
         Long recentMessageAt = messageRepository.findByChannelId(uuid).stream()
             .map(Message::getCreatedAt)
@@ -67,7 +69,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public ChannelResponse update(UUID id, ChannelRequest channelRequest) {
         Channel channel = channelRepository.findChannel(id).orElseThrow(
-            () -> new IllegalArgumentException("해당 채널은 존재하지 않습니다.")
+            () -> new DiscodeitRuntimeException(ExceptionType.CHANNEL_NOT_FOUND)
         );
         Channel updateChannel = channel.update(channelRequest);
         channelRepository.save(updateChannel);

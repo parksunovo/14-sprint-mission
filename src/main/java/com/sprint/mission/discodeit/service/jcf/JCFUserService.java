@@ -5,6 +5,8 @@ import com.sprint.mission.discodeit.dto.userDto.UserRequest;
 import com.sprint.mission.discodeit.dto.userDto.UserResponse;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
+import com.sprint.mission.discodeit.exception.ExceptionType;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
@@ -70,7 +72,7 @@ public class JCFUserService implements UserService {
 
     private User uuidValidator(UUID uuid) {
         return userRepository.findById(uuid).orElseThrow(()
-            -> new RuntimeException("존재하지 않는 유저입니다."));
+            -> new DiscodeitRuntimeException(ExceptionType.USER_NOT_FOUND));
     }
 
     private UserCreateRequest validateRequest(UserCreateRequest userCreateRequest) {
@@ -79,9 +81,8 @@ public class JCFUserService implements UserService {
         List<User> userList = userRepository.readAll();
         boolean result = userList.stream()
             .noneMatch(m -> m.getEmail().equals(email) || m.getName().equals(name));
-        System.out.println(result);
         if (!result) {
-            throw new IllegalArgumentException("해당 계정 정보가 이미 존재합니다.");
+            throw new DiscodeitRuntimeException(ExceptionType.USER_ALREADY_EXIST);
         }
         return userCreateRequest;
     }
@@ -89,6 +90,6 @@ public class JCFUserService implements UserService {
     private UserStatus getUserStatusByUserId(UUID uuid) {
         return userStatusRepository.readAll().stream()
             .filter(status -> status.getUserUuid().equals(uuid))
-            .findAny().orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
+            .findAny().orElseThrow(() -> new DiscodeitRuntimeException(ExceptionType.USER_ALREADY_EXIST));
     }
 }
