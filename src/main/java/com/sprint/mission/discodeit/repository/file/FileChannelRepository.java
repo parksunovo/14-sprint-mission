@@ -24,6 +24,11 @@ public class FileChannelRepository implements ChannelRepository {
 
 
     @Override
+    public boolean existsById(UUID channelId) {
+        return false;
+    }
+
+    @Override
     public Channel save(Channel channel) {
         return null;
     }

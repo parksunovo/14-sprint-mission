@@ -48,7 +48,7 @@ public enum ExceptionType {
     ),
     INVALID_INFO(
         Level.WARN,
-        HttpURLConnection.HTTP_UNAUTHORIZED,
+        HttpURLConnection.HTTP_NOT_FOUND,
         "이름과 비밀번호를 다시 확인해주세요."
     );
     Level level;
