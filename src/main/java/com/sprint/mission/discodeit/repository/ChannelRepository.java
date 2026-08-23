@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChannelRepository {
 
+    boolean existsById(UUID channelId);
+
     Channel save(Channel channel);
 
     Optional<Channel> findChannel(UUID uuid);

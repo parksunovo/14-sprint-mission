@@ -1,22 +1,21 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
+import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
 import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreate;
 import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreate;
-import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
-import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.ReadStatus;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
 import com.sprint.mission.discodeit.exception.ExceptionType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class JCFChannelService implements ChannelService {
         Channel savedChannel = channelRepository.save(channel);
         List<UUID> uuids = privateChannelCreate.userIds();
         for (UUID userId : uuids) {
-            ReadStatus readStatus = ReadStatus.create(userId,savedChannel.getId());
+            ReadStatus readStatus = ReadStatus.create(userId, savedChannel.getId());
             readStatusRepository.save(readStatus);
         }
         return findChannel(savedChannel.getId());
@@ -54,9 +53,9 @@ public class JCFChannelService implements ChannelService {
         Channel channel = channelRepository.findChannel(uuid).orElseThrow(
             () -> new DiscodeitRuntimeException(ExceptionType.CHANNEL_NOT_FOUND)
         );
-        Long recentMessageAt = messageRepository.findByChannelId(uuid).stream()
+        Instant recentMessageAt = messageRepository.findByChannelId(uuid).stream()
             .map(Message::getCreatedAt)
-            .max(Long::compareTo).orElse(null);
+            .max(Instant::compareTo).orElse(null);
         if (channel.getType() == ChannelType.PRIVATE) {
             List<UUID> privateUserIds = readStatusRepository.findByChannel(uuid).stream()
                 .map(ReadStatus::getUserId).toList();
@@ -85,7 +84,7 @@ public class JCFChannelService implements ChannelService {
 
     @Override
     public List<ChannelResponse> findByUserId(UUID userId) {
-        List<ReadStatus> readStatusList =readStatusRepository.findByUser(userId);
+        List<ReadStatus> readStatusList = readStatusRepository.findByUser(userId);
         List<UUID> uuidList = readStatusList.stream().map(ReadStatus::getChannelId).toList();
         List<ChannelResponse> channelList = new ArrayList<>();
         for (UUID uuid : uuidList) {

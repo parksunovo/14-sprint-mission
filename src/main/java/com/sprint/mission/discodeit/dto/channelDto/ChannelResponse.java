@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.dto.channelDto;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,15 +12,15 @@ public record ChannelResponse(
     ChannelType type,
     String channelName,
     String description,
-    Long createdAt,
-    Long updatedAt,
-    Long lastMessageAt,
+    Instant createdAt,
+    Instant updatedAt,
+    Instant lastMessageAt,
     List<UUID> userIds
 ) {
 
     public static ChannelResponse from(
         Channel channel,
-        Long recentMessageAt,
+        Instant recentMessageAt,
         List<UUID> userIds
     ) {
         return new ChannelResponse(
