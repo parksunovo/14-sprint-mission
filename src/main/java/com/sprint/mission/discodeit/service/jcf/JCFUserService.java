@@ -25,7 +25,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public UserResponse create(UserCreateRequest userCreateRequest) {
-        UserCreateRequest validRequest = validateRequest(userCreateRequest);
+        UserCreateRequest validRequest = normalizeRequest(userCreateRequest);
         User user = User.create(validRequest);
         UserStatus userStatus = UserStatus.create(user);
         UserStatus savedUserStatus = userStatusRepository.save(userStatus);
@@ -35,7 +35,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public UserResponse findById(UUID uuid) {
-        User user = uuidValidator(uuid);
+        User user = findUserOrThrow(uuid);
         UserStatus userStatus = getUserStatusByUserId(uuid);
         return UserResponse.from(user, userStatus);
     }
@@ -43,7 +43,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public UserResponse update(UUID id, UserUpdateRequest userUpdateRequest) {
-        User updatedUser = uuidValidator(id).update(
+        User updatedUser = findUserOrThrow(id).update(
             userUpdateRequest.newUsername(),
             userUpdateRequest.newPassword(),
             userUpdateRequest.newEmail());
@@ -56,7 +56,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public void delete(UUID uuid) {
-        uuidValidator(uuid);
+        findUserOrThrow(uuid);
         UserStatus userStatus = getUserStatusByUserId(uuid);
         userRepository.delete(uuid);
         UUID userStatusUUID = userStatus.getUuid();
@@ -71,12 +71,12 @@ public class JCFUserService implements UserService {
 
     }
 
-    private User uuidValidator(UUID uuid) {
+    private User findUserOrThrow(UUID uuid) {
         return userRepository.findById(uuid).orElseThrow(()
             -> new DiscodeitRuntimeException(ExceptionType.USER_NOT_FOUND));
     }
 
-    private UserCreateRequest validateRequest(UserCreateRequest userCreateRequest) {
+    private UserCreateRequest normalizeRequest(UserCreateRequest userCreateRequest) {
         String name = userCreateRequest.username();
         String email = userCreateRequest.email();
         List<User> userList = userRepository.readAll();
