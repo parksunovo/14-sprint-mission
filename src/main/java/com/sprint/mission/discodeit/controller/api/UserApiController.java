@@ -10,6 +10,7 @@ import com.sprint.mission.discodeit.service.UserStatusService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +43,7 @@ public class UserApiController {
     @RequestMapping(method = RequestMethod.POST, value = "")
     public ResponseEntity<UserResponse> register(@RequestBody UserCreateRequest request) {
         UserResponse response = userService.create(request);
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -54,7 +55,7 @@ public class UserApiController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID userId) {
         userService.delete(userId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{userId}")
