@@ -1,15 +1,14 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreate;
-import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreate;
-import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
+import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
+import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 //@Service
@@ -18,12 +17,12 @@ public class FileChannelService implements ChannelService {
     private final ChannelRepository channelRepository;
 
     @Override
-    public ChannelResponse createPrivate(PrivateChannelCreate privateChannelCreate) {
+    public ChannelResponse createPrivate(PrivateChannelCreateRequest privateChannelCreateRequest) {
         return null;
     }
 
     @Override
-    public ChannelResponse createPublic(PublicChannelCreate publicChannelCreate) {
+    public ChannelResponse createPublic(PublicChannelCreateRequest publicChannelCreateRequest) {
         return null;
     }
 

@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.dto.userDto.UserCreateRequest;
-import com.sprint.mission.discodeit.dto.userDto.UserRequest;
 import com.sprint.mission.discodeit.dto.userDto.UserResponse;
+import com.sprint.mission.discodeit.dto.userDto.UserUpdateRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
@@ -42,11 +42,11 @@ public class JCFUserService implements UserService {
 
 
     @Override
-    public UserResponse update(UUID id, UserRequest userRequest) {
+    public UserResponse update(UUID id, UserUpdateRequest userUpdateRequest) {
         User updatedUser = uuidValidator(id).update(
-            userRequest.name(),
-            userRequest.password(),
-            userRequest.email());
+            userUpdateRequest.name(),
+            userUpdateRequest.password(),
+            userUpdateRequest.email());
         User savedUser = userRepository.save(updatedUser);
         UserStatus userStatus = getUserStatusByUserId(savedUser.getId()).refresh(
             updatedUser.getUpdateAt());

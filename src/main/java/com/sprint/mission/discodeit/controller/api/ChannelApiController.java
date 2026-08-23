@@ -1,9 +1,10 @@
 package com.sprint.mission.discodeit.controller.api;
 
+import com.sprint.mission.discodeit.dto.channelDto.ChannelDto;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
-import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreate;
-import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreate;
+import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.util.List;
 import java.util.UUID;
@@ -24,14 +25,15 @@ public class ChannelApiController {
     private final ChannelService channelService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/public")
-    public ResponseEntity<ChannelResponse> createPublic(@RequestBody PublicChannelCreate request) {
+    public ResponseEntity<ChannelResponse> createPublic(
+        @RequestBody PublicChannelCreateRequest request) {
         ChannelResponse channelResponse = channelService.createPublic(request);
         return ResponseEntity.status(201).body(channelResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/private")
     public ResponseEntity<ChannelResponse> createPrivate(
-        @RequestBody PrivateChannelCreate request) {
+        @RequestBody PrivateChannelCreateRequest request) {
         ChannelResponse channelResponse = channelService.createPrivate(request);
         return ResponseEntity.status(201).body(channelResponse);
     }
@@ -49,9 +51,9 @@ public class ChannelApiController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<ChannelResponse>> findByUserId(
+    public ResponseEntity<List<ChannelDto>> findByUserId(
         @RequestParam(name = "userId") UUID userId) {
-        List<ChannelResponse> list = channelService.findByUserId(userId);
+        List<ChannelDto> list = channelService.findByUserId(userId);
         return ResponseEntity.ok(list);
     }
 }

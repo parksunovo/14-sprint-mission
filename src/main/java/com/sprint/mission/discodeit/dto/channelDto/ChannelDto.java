@@ -3,28 +3,27 @@ package com.sprint.mission.discodeit.dto.channelDto;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
-
-public record ChannelResponse(
+public record ChannelDto(
     UUID id,
-    Instant createdAt,
-    Instant updatedAt,
     ChannelType type,
     String name,
-    String description
+    String description,
+    List<UUID> participantIds,
+    Instant lastMessageAt
 ) {
 
-    public static ChannelResponse from(
-        Channel channel
-    ) {
-        return new ChannelResponse(
+    public static ChannelDto from(Channel channel, Instant lastMessageAt,
+        List<UUID> participantIds) {
+        return new ChannelDto(
             channel.getId(),
-            channel.getCreatedAt(),
-            channel.getUpdatedAt(),
             channel.getType(),
             channel.getChannelName(),
-            channel.getDescription()
+            channel.getDescription(),
+            participantIds,
+            lastMessageAt
         );
     }
 }

@@ -53,7 +53,7 @@ public class JCFUserStatusService implements UserStatusService {
     public UserStatusResponse update(UUID userStatusId, UserStatusUpdateRequest request) {
         UserStatus userStatus = userStatusRepository.read(userStatusId)
             .orElseThrow(() -> new DiscodeitRuntimeException(ExceptionType.INVALID_INFO));
-        UserStatus updatedUserStatus = userStatus.refresh(request.activityAt());
+        UserStatus updatedUserStatus = userStatus.refresh(request.newLastActiveAt());
         userStatusRepository.save(updatedUserStatus);
         return UserStatusResponse.from(updatedUserStatus);
     }
@@ -62,7 +62,7 @@ public class JCFUserStatusService implements UserStatusService {
     public UserStatusResponse updateByUserId(UUID userId, UserStatusUpdateRequest request) {
         UserStatus userStatus = userStatusRepository.findByUserId(userId)
             .orElseThrow(() -> new DiscodeitRuntimeException(ExceptionType.USER_NOT_FOUND));
-        UserStatus updatedUserStatus = userStatus.refresh(request.activityAt());
+        UserStatus updatedUserStatus = userStatus.refresh(request.newLastActiveAt());
         userStatusRepository.save(updatedUserStatus);
         return UserStatusResponse.from(updatedUserStatus);
     }

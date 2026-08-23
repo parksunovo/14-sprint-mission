@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
-import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreate;
+import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
 import com.sprint.mission.discodeit.exception.ExceptionType;
 import java.io.Serializable;
@@ -21,10 +21,10 @@ public class Channel implements Serializable {
     private String description;
 
 
-    public static Channel createPublic(PublicChannelCreate request) {
+    public static Channel createPublic(PublicChannelCreateRequest request) {
         Channel channel = new Channel();
         channel.description = request.description();
-        channel.channelName = request.channelName();
+        channel.channelName = request.name();
         channel.type = ChannelType.PUBLIC;
         return channel;
     }
@@ -37,12 +37,12 @@ public class Channel implements Serializable {
 
 
     public Channel update(ChannelRequest request) {
-        if (request.type() == ChannelType.PRIVATE || this.getType() == ChannelType.PRIVATE) {
+        if (this.getType() == ChannelType.PRIVATE) {
             throw new DiscodeitRuntimeException(ExceptionType.INVALID_INFO);
         }
-        this.channelName = request.channelName();
-        this.description = request.description();
-        this.updatedAt = request.updateAt();
+        this.channelName = request.newName();
+        this.description = request.newDescription();
+        this.updatedAt = Instant.now();
         return this;
     }
 

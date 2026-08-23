@@ -1,9 +1,10 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.dto.channelDto.ChannelDto;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
-import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreate;
-import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreate;
+import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.channelDto.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
@@ -30,26 +31,26 @@ public class JCFChannelService implements ChannelService {
     private final ReadStatusRepository readStatusRepository;
 
     @Override
-    public ChannelResponse createPrivate(PrivateChannelCreate privateChannelCreate) {
+    public ChannelResponse createPrivate(PrivateChannelCreateRequest privateChannelCreateRequest) {
         Channel channel = Channel.createPrivate();
         Channel savedChannel = channelRepository.save(channel);
-        List<UUID> uuids = privateChannelCreate.userIds();
+        List<UUID> uuids = privateChannelCreateRequest.participantIds();
         for (UUID userId : uuids) {
             ReadStatus readStatus = ReadStatus.create(userId, savedChannel.getId());
             readStatusRepository.save(readStatus);
         }
-        return findChannel(savedChannel.getId());
+        return ChannelResponse.from(channel);
     }
 
     @Override
-    public ChannelResponse createPublic(PublicChannelCreate publicChannelCreate) {
-        Channel channel = Channel.createPublic(publicChannelCreate);
+    public ChannelResponse createPublic(PublicChannelCreateRequest publicChannelCreateRequest) {
+        Channel channel = Channel.createPublic(publicChannelCreateRequest);
         Channel savedChannel = channelRepository.save(channel);
-        return findChannel(savedChannel.getId());
+        return ChannelResponse.from(channel);
     }
 
     @Override
-    public ChannelResponse findChannel(UUID uuid) {
+    public ChannelDto findChannel(UUID uuid) {
         Channel channel = channelRepository.findChannel(uuid).orElseThrow(
             () -> new DiscodeitRuntimeException(ExceptionType.CHANNEL_NOT_FOUND)
         );
@@ -59,10 +60,10 @@ public class JCFChannelService implements ChannelService {
         if (channel.getType() == ChannelType.PRIVATE) {
             List<UUID> privateUserIds = readStatusRepository.findByChannel(uuid).stream()
                 .map(ReadStatus::getUserId).toList();
-            return ChannelResponse.from(channel, recentMessageAt, privateUserIds);
+            return ChannelDto.from(channel, recentMessageAt, privateUserIds);
         }
 
-        return ChannelResponse.from(channel, recentMessageAt, null);
+        return ChannelDto.from(channel, recentMessageAt, null);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class JCFChannelService implements ChannelService {
         );
         Channel updateChannel = channel.update(channelRequest);
         channelRepository.save(updateChannel);
-        return findChannel(updateChannel.getId());
+        return ChannelResponse.from(channel);
     }
 
     @Override
@@ -83,12 +84,12 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public List<ChannelResponse> findByUserId(UUID userId) {
+    public List<ChannelDto> findByUserId(UUID userId) {
         List<ReadStatus> readStatusList = readStatusRepository.findByUser(userId);
         List<UUID> uuidList = readStatusList.stream().map(ReadStatus::getChannelId).toList();
-        List<ChannelResponse> channelList = new ArrayList<>();
+        List<ChannelDto> channelList = new ArrayList<>();
         for (UUID uuid : uuidList) {
-            ChannelResponse channel = findChannel(uuid);
+            ChannelDto channel = findChannel(uuid);
             channelList.add(channel);
         }
         return channelList;
