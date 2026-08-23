@@ -14,7 +14,12 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class JCFChannelRepository implements ChannelRepository {
 
-    private final Map<UUID, Channel> data;
+    private final Map<UUID, Channel> data = new HashMap<>();
+
+    @Override
+    public boolean existsById(UUID channelId) {
+        return data.containsKey(channelId);
+    }
 
     @Override
     public Channel save(Channel channel) {

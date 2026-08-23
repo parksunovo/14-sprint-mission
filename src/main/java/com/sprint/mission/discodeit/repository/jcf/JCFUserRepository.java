@@ -14,16 +14,18 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class JCFUserRepository implements UserRepository {
 
-    private final Map<UUID, User> data;
+    private final Map<UUID, User> data = new HashMap<>();
 
     @Override
     public User save(User user) {
-        System.out.println(data);
         UUID uuid = user.getId();
         data.put(uuid, user);
-        System.out.println("data = " + data);
-        System.out.println("data.getClass() = " + data.getClass());
         return data.get(uuid);
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return this.data.containsKey(id);
     }
 
     @Override

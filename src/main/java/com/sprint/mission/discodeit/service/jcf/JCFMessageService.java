@@ -4,6 +4,8 @@ import com.sprint.mission.discodeit.dto.messageDto.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.messageDto.MessageRequest;
 import com.sprint.mission.discodeit.dto.messageDto.MessageResponse;
 import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
+import com.sprint.mission.discodeit.exception.ExceptionType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -23,6 +25,13 @@ public class JCFMessageService implements MessageService {
 
     @Override
     public MessageResponse create(MessageCreateRequest messageCreateRequest) {
+        if (!userRepository.existsById(messageCreateRequest.userId())) {
+            throw new DiscodeitRuntimeException(ExceptionType.USER_NOT_FOUND);
+        }
+        if (!channelRepository.existsById(messageCreateRequest.channelId())) {
+            throw new DiscodeitRuntimeException(ExceptionType.CHANNEL_NOT_FOUND);
+        }
+
         Message message = Message.create(messageCreateRequest);
         Message savedMessage = messageRepository.save(message);
         return MessageResponse.from(savedMessage);

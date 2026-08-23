@@ -1,22 +1,24 @@
 package com.sprint.mission.discodeit.dto.messageDto;
 
 import com.sprint.mission.discodeit.entity.Message;
+import java.time.Instant;
 import java.util.UUID;
 
-public record MessageResponse (
+public record MessageResponse(
     UUID id,
-    UUID userId,
+    UUID authorId,
     UUID channelId,
     String content,
-    Long createdAt,
-    Long updatedAt
-){
+    Instant createdAt,
+    Instant updatedAt
+) {
+
     public static MessageResponse from(Message message) {
         return new MessageResponse(
             message.getId(),
             message.getAuthorId(),
             message.getChannelId(),
-            message.getMsg(),
+            message.getContent(),
             message.getCreatedAt(),
             message.getUpdatedAt()
         );
