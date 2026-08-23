@@ -13,36 +13,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/messages")
 public class MessageApiController {
 
     private final MessageService messageService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/message")
-    public ResponseEntity<MessageResponse> createMessage(MessageCreateRequest request) {
+    @RequestMapping(method = RequestMethod.POST, value = "")
+    public ResponseEntity<MessageResponse> createMessage(
+        @RequestBody MessageCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(messageService.create(request));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/api/message/{id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable UUID id) {
-        messageService.delete(id);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{messageId}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable UUID messageId) {
+        messageService.delete(messageId);
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/messages/{id}")
-    public List<ResponseEntity<MessageResponse>> getMessagesByChannel(@PathVariable UUID id) {
-        return messageService.findByChannel(id).stream()
-            .map(ResponseEntity::ok).toList();
+    @RequestMapping(method = RequestMethod.GET, value = "")
+    public ResponseEntity<List<MessageResponse>> getMessagesByChannel(
+        @RequestParam UUID channelId) {
+        return ResponseEntity.ok(messageService.findByChannel(channelId).stream().toList());
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, value = "/api/message/{id}")
-    public ResponseEntity<MessageResponse> updateMessage(@PathVariable UUID id,
+    @RequestMapping(method = RequestMethod.PATCH, value = "/{messageId}")
+    public ResponseEntity<MessageResponse> updateMessage(@PathVariable UUID messageId,
         @RequestBody MessageRequest request) {
-        if (id.equals(request.uuid())) {
-        return ResponseEntity.ok(messageService.update(request));
+        if (messageId.equals(request.uuid())) {
+            return ResponseEntity.ok(messageService.update(request));
         }
         return ResponseEntity.badRequest().build();
     }
