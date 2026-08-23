@@ -52,8 +52,9 @@ public class UserApiController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
-    public void deleteById(@PathVariable UUID userId) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID userId) {
         userService.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{userId}")

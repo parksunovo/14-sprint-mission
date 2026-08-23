@@ -46,8 +46,9 @@ public class ChannelApiController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{channelId}")
-    public void deleteChannel(@PathVariable UUID channelId) {
+    public ResponseEntity<Void> deleteChannel(@PathVariable UUID channelId) {
         channelService.delete(channelId);
+        return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "")
