@@ -22,7 +22,6 @@ public class UserStatus {
         this.userUuid = userUuid;
         this.createdAt = Instant.now();
         this.lastActiveAt = lastActiveAt;
-        this.isOnline = isOnline();
     }
 
     public static UserStatus create(User user) {
@@ -40,7 +39,7 @@ public class UserStatus {
     public Boolean isOnline() {
         Instant instant = Instant.now().minus(Duration.ofMinutes(5));
 
-        return updatedAt.isAfter(instant);
+        return lastActiveAt.isAfter(instant);
     }
 
 }
