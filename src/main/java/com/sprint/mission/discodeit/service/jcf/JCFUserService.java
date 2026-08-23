@@ -48,7 +48,8 @@ public class JCFUserService implements UserService {
             userRequest.password(),
             userRequest.email());
         User savedUser = userRepository.save(updatedUser);
-        UserStatus userStatus = getUserStatusByUserId(savedUser.getId()).refresh();
+        UserStatus userStatus = getUserStatusByUserId(savedUser.getId()).refresh(
+            updatedUser.getUpdateAt());
         UserStatus savedUserStatus = userStatusRepository.save(userStatus);
         return UserResponse.from(savedUser, savedUserStatus);
     }
@@ -90,6 +91,7 @@ public class JCFUserService implements UserService {
     private UserStatus getUserStatusByUserId(UUID uuid) {
         return userStatusRepository.readAll().stream()
             .filter(status -> status.getUserUuid().equals(uuid))
-            .findAny().orElseThrow(() -> new DiscodeitRuntimeException(ExceptionType.USER_ALREADY_EXIST));
+            .findAny()
+            .orElseThrow(() -> new DiscodeitRuntimeException(ExceptionType.USER_ALREADY_EXIST));
     }
 }

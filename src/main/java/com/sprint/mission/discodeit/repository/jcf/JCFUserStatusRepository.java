@@ -13,12 +13,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class JCFUserStatusRepository implements UserStatusRepository {
-    private final Map<UUID, UserStatus> data;
+
+    private final Map<UUID, UserStatus> data = new HashMap<>();
 
     @Override
     public UserStatus save(UserStatus userStatus) {
         data.put(userStatus.getUuid(), userStatus);
         return data.get(userStatus.getUuid());
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return this.data.containsKey(id);
     }
 
     @Override
@@ -34,6 +40,11 @@ public class JCFUserStatusRepository implements UserStatusRepository {
     @Override
     public List<UserStatus> readAll() {
         return data.values().stream().toList();
+    }
+
+    @Override
+    public Optional<UserStatus> findByUserId(UUID userId) {
+        return data.values().stream().filter(m -> m.getUserUuid().equals(userId)).findAny();
     }
 
 

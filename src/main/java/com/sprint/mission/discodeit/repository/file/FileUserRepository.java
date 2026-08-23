@@ -15,6 +15,11 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existsById(UUID id) {
+        return false;
+    }
+
+    @Override
     public Optional<User> findById(UUID uuid) {
         return Optional.empty();
     }

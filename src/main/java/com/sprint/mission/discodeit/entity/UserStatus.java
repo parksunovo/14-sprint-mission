@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
-import com.sprint.mission.discodeit.util.Instant;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,18 +10,18 @@ import lombok.ToString;
 @ToString
 public class UserStatus {
 
-    private UUID uuid;
-    private UUID userUuid;
+    private final UUID uuid;
+    private final UUID userUuid;
     private boolean isOnline;
-    private Long createdAt;
-    private Long activityAt;
+    private final Instant createdAt;
+    private Instant activityAt;
 
-    public UserStatus(UUID userUuid, Long activityAt) {
+    public UserStatus(UUID userUuid, Instant activityAt) {
         this.uuid = UUID.randomUUID();
         this.userUuid = userUuid;
         this.createdAt = Instant.now();
         this.activityAt = activityAt;
-        this.isOnline = (Instant.now() - this.activityAt) < 500;
+        this.isOnline = isOnline();
     }
 
     public static UserStatus create(User user) {
@@ -28,9 +29,16 @@ public class UserStatus {
     }
 
 
-    public UserStatus refresh() {
-        this.activityAt = Instant.now();
+    public UserStatus refresh(Instant instant) {
+        this.activityAt = instant;
+        this.isOnline = isOnline();
         return this;
+    }
+
+    public Boolean isOnline() {
+        Instant instant = Instant.now().minus(Duration.ofMinutes(5));
+
+        return activityAt.isAfter(instant);
     }
 
 }

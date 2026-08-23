@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.dto.userDto.UserCreateRequest;
-import com.sprint.mission.discodeit.util.Instant;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
 
@@ -11,8 +11,8 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private final UUID id;
-    private final Long createdAt;
-    private Long updateAt;
+    private final Instant createdAt;
+    private Instant updateAt;
     private String name;
     private String password;
     private String email;

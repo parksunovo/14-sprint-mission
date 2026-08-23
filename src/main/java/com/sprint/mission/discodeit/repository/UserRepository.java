@@ -9,6 +9,8 @@ public interface UserRepository {
 
     User save(User user);
 
+    boolean existsById(UUID id);
+
     Optional<User> findById(UUID uuid);
 
     void delete(UUID uuid);
