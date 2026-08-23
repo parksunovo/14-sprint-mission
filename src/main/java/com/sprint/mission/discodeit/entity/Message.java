@@ -29,7 +29,7 @@ public class Message implements Serializable {
     }
 
     public static Message create(MessageCreateRequest messageCreateRequest) {
-        return new Message(messageCreateRequest.content(), messageCreateRequest.userId(),
+        return new Message(messageCreateRequest.content(), messageCreateRequest.authorId(),
             messageCreateRequest.channelId());
     }
 

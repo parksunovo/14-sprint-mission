@@ -25,7 +25,7 @@ public class JCFMessageService implements MessageService {
 
     @Override
     public MessageResponse create(MessageCreateRequest messageCreateRequest) {
-        if (!userRepository.existsById(messageCreateRequest.userId())) {
+        if (!userRepository.existsById(messageCreateRequest.authorId())) {
             throw new DiscodeitRuntimeException(ExceptionType.USER_NOT_FOUND);
         }
         if (!channelRepository.existsById(messageCreateRequest.channelId())) {

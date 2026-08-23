@@ -41,6 +41,6 @@ public class User implements Serializable {
 
 
     public static User create(UserCreateRequest request) {
-        return new User(request.name(), request.password(), request.email());
+        return new User(request.username(), request.password(), request.email());
     }
 }

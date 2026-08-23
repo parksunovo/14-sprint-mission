@@ -44,9 +44,9 @@ public class JCFUserService implements UserService {
     @Override
     public UserResponse update(UUID id, UserUpdateRequest userUpdateRequest) {
         User updatedUser = uuidValidator(id).update(
-            userUpdateRequest.name(),
-            userUpdateRequest.password(),
-            userUpdateRequest.email());
+            userUpdateRequest.newUsername(),
+            userUpdateRequest.newPassword(),
+            userUpdateRequest.newEmail());
         User savedUser = userRepository.save(updatedUser);
         UserStatus userStatus = getUserStatusByUserId(savedUser.getId()).refresh(
             updatedUser.getUpdateAt());
@@ -77,7 +77,7 @@ public class JCFUserService implements UserService {
     }
 
     private UserCreateRequest validateRequest(UserCreateRequest userCreateRequest) {
-        String name = userCreateRequest.name();
+        String name = userCreateRequest.username();
         String email = userCreateRequest.email();
         List<User> userList = userRepository.readAll();
         boolean result = userList.stream()

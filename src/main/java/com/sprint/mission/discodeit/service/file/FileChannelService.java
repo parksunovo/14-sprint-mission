@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.channelDto.ChannelDto;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelRequest;
 import com.sprint.mission.discodeit.dto.channelDto.ChannelResponse;
 import com.sprint.mission.discodeit.dto.channelDto.PrivateChannelCreateRequest;
@@ -27,7 +28,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public ChannelResponse findChannel(UUID uuid) {
+    public ChannelDto findChannel(UUID uuid) {
         return null;
     }
 
@@ -41,9 +42,10 @@ public class FileChannelService implements ChannelService {
 
     }
 
-
     @Override
-    public List<ChannelResponse> findByUserId(UUID userId) {
+    public List<ChannelDto> findByUserId(UUID userId) {
         return List.of();
     }
+
+
 }
