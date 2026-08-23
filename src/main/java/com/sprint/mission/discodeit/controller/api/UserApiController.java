@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.controller.api;
 
 import com.sprint.mission.discodeit.dto.userDto.UserCreateRequest;
-import com.sprint.mission.discodeit.dto.userDto.UserRequest;
 import com.sprint.mission.discodeit.dto.userDto.UserResponse;
+import com.sprint.mission.discodeit.dto.userDto.UserUpdateRequest;
 import com.sprint.mission.discodeit.dto.userStatusDto.UserStatusResponse;
 import com.sprint.mission.discodeit.dto.userStatusDto.UserStatusUpdateRequest;
 import com.sprint.mission.discodeit.service.UserService;
@@ -58,7 +58,7 @@ public class UserApiController {
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{userId}")
     public ResponseEntity<UserResponse> update(@PathVariable UUID userId,
-        @RequestBody UserRequest request) {
+        @RequestBody UserUpdateRequest request) {
 
         UserResponse response = userService.update(userId, request);
         return ResponseEntity.ok(response);

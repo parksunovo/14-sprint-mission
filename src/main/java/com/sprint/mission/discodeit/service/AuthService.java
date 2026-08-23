@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service;
 
-import com.sprint.mission.discodeit.dto.userDto.UserRequest;
+import com.sprint.mission.discodeit.dto.userDto.LoginRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.exception.DiscodeitRuntimeException;
 import com.sprint.mission.discodeit.exception.ExceptionType;
@@ -14,8 +14,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public User login(UserRequest userRequest) {
-        String name = userRequest.name();
+    public User login(LoginRequest userRequest) {
+        String name = userRequest.username();
         String password = userRequest.password();
 
         User user = userRepository.readAll().stream()

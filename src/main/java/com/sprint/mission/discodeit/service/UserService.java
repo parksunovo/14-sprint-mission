@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.dto.userDto.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.userDto.UserResponse;
-import com.sprint.mission.discodeit.dto.userDto.UserRequest;
+import com.sprint.mission.discodeit.dto.userDto.UserUpdateRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public interface UserService {
 
     UserResponse findById(UUID uuid);
 
-    UserResponse update(UUID id, UserRequest userRequest);
+    UserResponse update(UUID id, UserUpdateRequest userUpdateRequest);
 
     void delete(UUID uuid);
 

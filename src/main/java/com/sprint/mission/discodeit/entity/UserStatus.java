@@ -14,13 +14,14 @@ public class UserStatus {
     private final UUID userUuid;
     private boolean isOnline;
     private final Instant createdAt;
-    private Instant activityAt;
+    private Instant updatedAt;
+    private Instant lastActiveAt;
 
-    public UserStatus(UUID userUuid, Instant activityAt) {
+    public UserStatus(UUID userUuid, Instant lastActiveAt) {
         this.uuid = UUID.randomUUID();
         this.userUuid = userUuid;
         this.createdAt = Instant.now();
-        this.activityAt = activityAt;
+        this.lastActiveAt = lastActiveAt;
         this.isOnline = isOnline();
     }
 
@@ -30,7 +31,8 @@ public class UserStatus {
 
 
     public UserStatus refresh(Instant instant) {
-        this.activityAt = instant;
+        this.lastActiveAt = instant;
+        this.updatedAt = Instant.now();
         this.isOnline = isOnline();
         return this;
     }
@@ -38,7 +40,7 @@ public class UserStatus {
     public Boolean isOnline() {
         Instant instant = Instant.now().minus(Duration.ofMinutes(5));
 
-        return activityAt.isAfter(instant);
+        return updatedAt.isAfter(instant);
     }
 
 }
