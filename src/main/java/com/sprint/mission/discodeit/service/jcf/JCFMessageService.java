@@ -55,8 +55,12 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public MessageResponse update(MessageRequest messageRequest) {
-        Message message = messageRepository.update(messageRequest.uuid(), messageRequest.content());
+    public MessageResponse update(UUID messageId, MessageRequest messageRequest) {
+        if (!messageId.equals(messageRequest.uuid())) {
+            throw new DiscodeitRuntimeException(ExceptionType.MESSAGE_NOT_FOUND);
+        }
+        Message message = messageRepository.update(messageRequest.uuid(),
+            messageRequest.content());
         return MessageResponse.from(message);
     }
 

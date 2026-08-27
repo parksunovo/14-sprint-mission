@@ -44,9 +44,6 @@ public class MessageApiController {
     @RequestMapping(method = RequestMethod.PATCH, value = "/{messageId}")
     public ResponseEntity<MessageResponse> updateMessage(@PathVariable UUID messageId,
         @RequestBody MessageRequest request) {
-        if (messageId.equals(request.uuid())) {
-            return ResponseEntity.ok(messageService.update(request));
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(messageService.update(messageId, request));
     }
 }

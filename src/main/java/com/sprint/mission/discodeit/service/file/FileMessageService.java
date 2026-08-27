@@ -3,15 +3,11 @@ package com.sprint.mission.discodeit.service.file;
 import com.sprint.mission.discodeit.dto.messageDto.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.messageDto.MessageRequest;
 import com.sprint.mission.discodeit.dto.messageDto.MessageResponse;
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 public class FileMessageService implements MessageService {
@@ -39,7 +35,7 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
-    public MessageResponse update(MessageRequest messageRequest) {
+    public MessageResponse update(UUID messageId, MessageRequest messageRequest) {
         return null;
     }
 
