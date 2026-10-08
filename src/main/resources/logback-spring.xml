@@ -46,6 +46,7 @@
       </fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
+    현
     <encoder>
       <pattern>%d{yy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %.36logger{36} -%kvp- %msg%n</pattern>
     </encoder>

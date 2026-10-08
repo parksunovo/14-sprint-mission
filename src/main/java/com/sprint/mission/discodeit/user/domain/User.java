@@ -26,7 +26,9 @@ public class User extends BaseUpdatableEntity {
   private String password;
   @Column(name = "email", nullable = false, length = 100, unique = true)
   private String email;
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY,
+      cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
   @JoinColumn(name = "profile_id", unique = true)
   private BinaryContent profile;
   @OneToOne(
@@ -42,6 +44,11 @@ public class User extends BaseUpdatableEntity {
     this.password = password;
     this.email = email;
     this.profile = profile;
+    this.userStatus = UserStatus.create(this, Instant.now());
+  }
+
+  public UserStatus refreshActivity(Instant lastActiveAt) {
+    return this.userStatus.refresh(lastActiveAt);
   }
 
 
@@ -61,9 +68,6 @@ public class User extends BaseUpdatableEntity {
     return this;
   }
 
-  public void initStatus(Instant lastActiveAt) {
-    this.userStatus = UserStatus.create(this, lastActiveAt);
-  }
 
   @Override
   public String toString() {
@@ -72,6 +76,7 @@ public class User extends BaseUpdatableEntity {
 
 
   public static User create(String username, String password, String email, BinaryContent profile) {
+
     return new User(username, password, email, profile);
   }
 }

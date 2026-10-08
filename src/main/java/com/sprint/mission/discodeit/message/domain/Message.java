@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends BaseUpdatableEntity {
 
-  @Column(name = "content", columnDefinition = "TEXT")
+  @Column(name = "content", columnDefinition = "text")
   private String content;
   @JoinColumn(name = "channel_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,6 +58,10 @@ public class Message extends BaseUpdatableEntity {
   public static Message create(String content, Channel channel, User author,
       List<BinaryContent> attachments) {
     return new Message(content, channel, author, attachments);
+  }
+
+  public void clearAuthor() {
+    this.author = null;
   }
 
 
