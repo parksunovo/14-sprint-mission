@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.binarycontent.application.provided.command.B
 import com.sprint.mission.discodeit.binarycontent.domain.BinaryContent;
 import com.sprint.mission.discodeit.channel.application.provided.query.ChannelEntityFinder;
 import com.sprint.mission.discodeit.channel.domain.Channel;
+import com.sprint.mission.discodeit.common.DeletionEvent;
 import com.sprint.mission.discodeit.message.application.dto.MessageCreateRequest;
 import com.sprint.mission.discodeit.message.application.dto.MessageDto;
 import com.sprint.mission.discodeit.message.application.dto.MessageUpdateRequest;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,7 @@ public class MessageAppService implements MessageRegister, MessageModifier,
   private final UserEntityFinder userEntityFinder;
   private final BinaryContentRegister binaryContentRegister;
   private final MessageEntityFinder messageEntityFinder;
+  private final ApplicationEventPublisher eventPublisher;
 
 
   @Override
@@ -59,8 +63,24 @@ public class MessageAppService implements MessageRegister, MessageModifier,
   }
 
   @Override
-  public void delete(UUID messageId) {
+  public void remove(UUID messageId) {
     Message message = messageEntityFinder.getEntityById(messageId);
+    List<UUID> attachmentsIds = message.getAttachments().stream().map(BinaryContent::getId)
+        .toList();
+    ResolvableType resolvableType = ResolvableType.forClassWithGenerics(List.class, UUID.class);
+    DeletionEvent<List<UUID>> event = new DeletionEvent<>(List.copyOf(attachmentsIds),
+        resolvableType);
+    eventPublisher.publishEvent(event);
     messageCommand.delete(message);
   }
+
+  @Override
+  public void removeAllByChannelId(UUID channelId) {
+    List<Message> messages = messageEntityFinder.getEntitiesByChannelId(channelId);
+    for (Message m : messages) {
+      remove(m.getId());
+    }
+  }
+
+
 }

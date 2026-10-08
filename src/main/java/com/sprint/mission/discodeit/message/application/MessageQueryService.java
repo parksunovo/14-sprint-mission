@@ -35,6 +35,10 @@ public class MessageQueryService implements MessageEntityFinder, MessageTimeFind
         ErrorCode.MESSAGE_NOT_FOUND));
   }
 
+  @Override
+  public List<Message> getEntitiesByChannelId(UUID channelId) {
+    return messageRepository.findAllByChannel_Id(channelId);
+  }
 
   @Override
   public Optional<Instant> getLastMessageAt(UUID channelId) {

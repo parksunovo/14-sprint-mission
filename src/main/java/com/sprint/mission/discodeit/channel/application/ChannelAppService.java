@@ -13,6 +13,7 @@ import com.sprint.mission.discodeit.channel.application.provided.query.ChannelEn
 import com.sprint.mission.discodeit.channel.application.provided.query.ChannelFinder;
 import com.sprint.mission.discodeit.channel.domain.Channel;
 import com.sprint.mission.discodeit.channel.domain.ChannelType;
+import com.sprint.mission.discodeit.message.application.provided.command.MessageRemover;
 import com.sprint.mission.discodeit.message.application.provided.query.MessageTimeFinder;
 import com.sprint.mission.discodeit.readstatus.application.provided.command.ReadStatusCommand;
 import com.sprint.mission.discodeit.readstatus.application.provided.query.ReadStatusEntityFinder;
@@ -39,6 +40,7 @@ public class ChannelAppService implements ChannelRegister, ChannelModifier, Chan
   private final ChannelCommand channelCommand;
   private final ChannelEntityFinder channelEntityFinder;
   private final MessageTimeFinder messageTimeFinder;
+  private final MessageRemover messageRemover;
   private final UserEntityFinder userEntityFinder;
   private final ReadStatusCommand readStatusCommand;
   private final ReadStatusEntityFinder readStatusEntityFinder;
@@ -72,7 +74,8 @@ public class ChannelAppService implements ChannelRegister, ChannelModifier, Chan
   @Override
   public void delete(UUID channelId) {
     Channel channel = channelEntityFinder.getEntityById(channelId);
-
+    readStatusCommand.deleteAllByChannelId(channelId);
+    messageRemover.removeAllByChannelId(channelId);
     channelCommand.delete(channel);
   }
 

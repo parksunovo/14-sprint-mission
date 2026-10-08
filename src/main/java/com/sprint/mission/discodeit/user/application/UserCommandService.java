@@ -5,7 +5,6 @@ import com.sprint.mission.discodeit.user.application.provided.command.UserComman
 import com.sprint.mission.discodeit.user.application.required.UserRepository;
 import com.sprint.mission.discodeit.user.application.validation.UserValidator;
 import com.sprint.mission.discodeit.user.domain.User;
-import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,6 @@ public class UserCommandService implements UserCommand {
   public User create(String username, String email, String password, BinaryContent profile) {
     userValidator.validateCreate(username, email);
     User user = User.create(username, password, email, profile);
-    user.initStatus(Instant.now());
     return userRepository.save(user);
   }
 
