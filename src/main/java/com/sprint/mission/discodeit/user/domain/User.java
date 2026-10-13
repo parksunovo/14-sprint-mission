@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,10 @@ public class User extends BaseUpdatableEntity {
   private String username;
   @Column(name = "password", nullable = false, length = 60)
   private String password;
+
   @Column(name = "email", nullable = false, length = 100, unique = true)
-  private String email;
+  private Email email;
+
   @OneToOne(fetch = FetchType.LAZY,
       cascade = CascadeType.REMOVE,
       orphanRemoval = true)
@@ -39,10 +42,10 @@ public class User extends BaseUpdatableEntity {
   )
   private UserStatus userStatus;
 
-  private User(String name, String password, String email, BinaryContent profile) {
+  private User(String name, String password, Email email, BinaryContent profile) {
     this.username = name;
     this.password = password;
-    this.email = email;
+    this.email = Objects.requireNonNull(email, "email 값은 필수임.");
     this.profile = profile;
     this.userStatus = UserStatus.create(this, Instant.now());
   }
@@ -52,7 +55,7 @@ public class User extends BaseUpdatableEntity {
   }
 
 
-  public User update(String updateName, String password, String email, BinaryContent profile) {
+  public User update(String updateName, String password, Email email, BinaryContent profile) {
     if (updateName != null) {
       this.username = updateName;
     }
@@ -75,7 +78,7 @@ public class User extends BaseUpdatableEntity {
   }
 
 
-  public static User create(String username, String password, String email, BinaryContent profile) {
+  public static User create(String username, String password, Email email, BinaryContent profile) {
 
     return new User(username, password, email, profile);
   }

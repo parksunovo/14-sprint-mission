@@ -25,7 +25,7 @@ public class UserMapper {
     return new UserDto(
         user.getId(),
         user.getUsername(),
-        user.getEmail(),
+        user.getEmail().value(),
         binaryContentMapper.toDto(user.getProfile()),
         online);
   }

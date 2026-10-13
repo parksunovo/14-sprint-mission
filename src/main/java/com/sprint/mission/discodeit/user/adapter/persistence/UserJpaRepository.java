@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.user.adapter.persistence;
 
+import com.sprint.mission.discodeit.user.domain.Email;
 import com.sprint.mission.discodeit.user.domain.User;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,5 +12,5 @@ public interface UserJpaRepository extends JpaRepository<User, UUID> {
 
   boolean existsByUsername(String username);
 
-  boolean existsByEmail(String email);
+  boolean existsByEmail(Email email);
 }

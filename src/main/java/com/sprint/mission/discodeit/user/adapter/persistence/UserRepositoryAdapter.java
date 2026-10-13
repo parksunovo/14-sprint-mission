@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.user.adapter.persistence;
 
 import com.sprint.mission.discodeit.user.application.required.UserRepository;
+import com.sprint.mission.discodeit.user.domain.Email;
 import com.sprint.mission.discodeit.user.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -42,5 +43,15 @@ public class UserRepositoryAdapter implements UserRepository {
   @Override
   public Optional<User> findByUsername(String username) {
     return jpaRepository.findByUsername(username);
+  }
+
+  @Override
+  public boolean existsByUsername(String username) {
+    return jpaRepository.existsByUsername(username);
+  }
+
+  @Override
+  public boolean existsByEmail(Email email) {
+    return jpaRepository.existsByEmail(email);
   }
 }

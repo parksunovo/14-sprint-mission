@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.user.application.required;
 
+import com.sprint.mission.discodeit.user.domain.Email;
 import com.sprint.mission.discodeit.user.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,7 @@ public interface UserRepository {
 
   Optional<User> findByUsername(String username);
 
+  boolean existsByUsername(String username);
+
+  boolean existsByEmail(Email email);
 }
