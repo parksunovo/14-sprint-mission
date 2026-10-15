@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.channel.application.dto.PublicChannelCreateR
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelModifier;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelRegister;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelRemover;
+import com.sprint.mission.discodeit.channel.application.provided.command.CreateChannel;
 import com.sprint.mission.discodeit.channel.application.provided.query.ChannelFinder;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +35,8 @@ public class ChannelApiController {
   @RequestMapping(method = RequestMethod.POST, value = "/public")
   public ResponseEntity<ChannelDto> createPublic(
       @RequestBody PublicChannelCreateRequest request) {
-    ChannelDto channelDto = channelRegister.registerPublic(request);
+    ChannelDto channelDto = channelRegister.register(
+        new CreateChannel.Public(request.name(), request.description()));
     log.debug("공개 채널: channelDto = {}", channelDto);
     return ResponseEntity.status(201).body(channelDto);
   }
@@ -42,7 +44,8 @@ public class ChannelApiController {
   @RequestMapping(method = RequestMethod.POST, value = "/private")
   public ResponseEntity<ChannelDto> createPrivate(
       @RequestBody PrivateChannelCreateRequest request) {
-    ChannelDto channelDto = channelRegister.registerPrivate(request);
+    ChannelDto channelDto = channelRegister.register(
+        new CreateChannel.Private(request.participantIds()));
     log.debug("비공개 채널: channelDto = {}", channelDto);
     return ResponseEntity.status(201).body(channelDto);
   }

@@ -2,13 +2,12 @@ package com.sprint.mission.discodeit.channel.application;
 
 import com.sprint.mission.discodeit.channel.application.dto.ChannelDto;
 import com.sprint.mission.discodeit.channel.application.dto.ChannelRequest;
-import com.sprint.mission.discodeit.channel.application.dto.PrivateChannelCreateRequest;
-import com.sprint.mission.discodeit.channel.application.dto.PublicChannelCreateRequest;
 import com.sprint.mission.discodeit.channel.application.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelCommand;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelModifier;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelRegister;
 import com.sprint.mission.discodeit.channel.application.provided.command.ChannelRemover;
+import com.sprint.mission.discodeit.channel.application.provided.command.CreateChannel;
 import com.sprint.mission.discodeit.channel.application.provided.query.ChannelEntityFinder;
 import com.sprint.mission.discodeit.channel.application.provided.query.ChannelFinder;
 import com.sprint.mission.discodeit.channel.domain.Channel;
@@ -45,7 +44,6 @@ public class ChannelAppService implements ChannelRegister, ChannelModifier, Chan
   private final ReadStatusCommand readStatusCommand;
   private final ReadStatusEntityFinder readStatusEntityFinder;
 
-
   @Override
   public ChannelDto modify(UUID channelId, ChannelRequest request) {
 
@@ -55,21 +53,39 @@ public class ChannelAppService implements ChannelRegister, ChannelModifier, Chan
     return channelMapper.toDto(updated, List.of(), lastMessageAt);
   }
 
-  @Override
-  public ChannelDto registerPublic(PublicChannelCreateRequest request) {
-    Channel channel = channelCommand.createPublic(request.name(), request.description());
-    log.info("공개 채널 생성: channel = {}", channel);
-    return channelMapper.toDto(channel, List.of(), null);
-  }
+//  @Override
+//  public ChannelDto registerPublic(PublicChannelCreateRequest request) {
+//    Channel channel = channelCommand.createPublic(request.name(), request.description());
+//    log.info("공개 채널 생성: channel = {}", channel);
+//    return channelMapper.toDto(channel, List.of(), null);
+//  }
+
+//  @Override
+//  public ChannelDto registerPrivate(PrivateChannelCreateRequest request) {
+//    Channel channel = channelCommand.createPrivate();
+//    List<User> participants = userEntityFinder.getEntitiesById(request.participantIds());
+//    readStatusCommand.createAll(channel, participants, Instant.now());
+//    log.info("비공개 채널 생성: channel = {}", channel);
+//    return channelMapper.toDto(channel, participants, null);
+//  }
 
   @Override
-  public ChannelDto registerPrivate(PrivateChannelCreateRequest request) {
-    Channel channel = channelCommand.createPrivate();
-    List<User> participants = userEntityFinder.getEntitiesById(request.participantIds());
-    readStatusCommand.createAll(channel, participants, Instant.now());
-    log.info("비공개 채널 생성: channel = {}", channel);
-    return channelMapper.toDto(channel, participants, null);
+  public ChannelDto register(CreateChannel command) {
+
+    return switch (command) {
+      case CreateChannel.Public(var name, var description) -> {
+        Channel aPublic = channelCommand.createPublic(name, description);
+        yield channelMapper.toDto(aPublic, List.of(), null);
+      }
+      case CreateChannel.Private(var participantsIds) -> {
+        Channel aPrivate = channelCommand.createPrivate();
+        List<User> participants = userEntityFinder.getEntitiesById(participantsIds);
+        readStatusCommand.createAll(aPrivate, participants, Instant.now());
+        yield channelMapper.toDto(aPrivate, participants, null);
+      }
+    };
   }
+
 
   @Override
   public void delete(UUID channelId) {
