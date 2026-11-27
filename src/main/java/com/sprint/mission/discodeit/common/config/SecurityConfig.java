@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.common.config;
 
 import com.sprint.mission.discodeit.auth.adapter.security.CustomFailureHandler;
 import com.sprint.mission.discodeit.auth.adapter.security.CustomSuccessHandler;
+import com.sprint.mission.discodeit.auth.adapter.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,7 +36,8 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, CustomSuccessHandler successHandler,
-      CustomFailureHandler failureHandler, SessionRegistry sessionRegistry)
+      CustomFailureHandler failureHandler, SessionRegistry sessionRegistry,
+      CustomUserDetailsService userDetailsService)
       throws Exception {
 
     http.csrf(csrf -> csrf.spa())
@@ -49,7 +51,6 @@ public class SecurityConfig {
     http.sessionManagement(session -> session.sessionConcurrency(
         concurrency -> concurrency
             .maximumSessions(1)
-            .maxSessionsPreventsLogin(true)
             .sessionRegistry(sessionRegistry)
     ));
 
@@ -61,6 +62,8 @@ public class SecurityConfig {
         .exceptionHandling(e -> e.defaultAuthenticationEntryPointFor(
             new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
             PathPatternRequestMatcher.withDefaults().matcher("/api/**")));
+
+    http.rememberMe(remember -> remember.userDetailsService(userDetailsService));
 
     return http.build();
   }

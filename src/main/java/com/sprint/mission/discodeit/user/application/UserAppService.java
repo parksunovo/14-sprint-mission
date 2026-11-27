@@ -62,6 +62,7 @@ public class UserAppService implements UserRegister, UserModifier, UserRemover, 
   }
 
 
+  @PreAuthorize("principal.userId == #command.userId()")
   @Override
   public UserDto modify(ModifyUserCommand command) {
     User user = entityFinder.getEntityById(command.userId());
@@ -76,6 +77,7 @@ public class UserAppService implements UserRegister, UserModifier, UserRemover, 
     return userMapper.toDto(updatedUser);
   }
 
+  @PreAuthorize("principal.userId == #userId")
   @Override
   public void delete(UUID userId) {
     User user = entityFinder.getEntityById(userId);
