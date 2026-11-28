@@ -13,9 +13,9 @@ public class HttpStatusConverter {
 
       case INVALID_INFO -> HttpStatus.BAD_REQUEST;
 
-      case LOGIN_FAILED -> HttpStatus.UNAUTHORIZED;
+      case LOGIN_FAILED, INVALID_JWT -> HttpStatus.UNAUTHORIZED;
 
-      case INTERNAL_ERROR -> HttpStatus.INTERNAL_SERVER_ERROR;
+      case INTERNAL_ERROR, SIGN_FAILED -> HttpStatus.INTERNAL_SERVER_ERROR;
     };
   }
 }

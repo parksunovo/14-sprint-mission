@@ -41,7 +41,14 @@ public enum ErrorCode {
   ),
   INTERNAL_ERROR(
       "내부 오류가 발생했습니다."
+  ),
+  INVALID_JWT(
+      "유효하지 않은 jwtToken"
+  ),
+  SIGN_FAILED(
+      "jwt 서명 실패"
   );
+
 
   String message;
 }

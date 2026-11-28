@@ -2,6 +2,10 @@ spring:
   profiles:
     default: dev
 
+  discodeit:
+    jwt:
+      secret: ${JWT_SECRET}
+
   application:
     name: discodeit
 
