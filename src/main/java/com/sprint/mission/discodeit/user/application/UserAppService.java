@@ -95,7 +95,9 @@ public class UserAppService implements UserRegister, UserModifier, UserRemover, 
     User user = entityFinder.getEntityById(userId);
 
     if (user.getRole() != role) {
+      log.info("before userId={} role={}", user.getId(), user.getRole());
       user.updateRole(role);
+      log.info("after userId={} role={}", user.getId(), user.getRole());
       eventPublisher.publishEvent(UserRoleChanged.to(userId));
     }
 
